@@ -1,56 +1,73 @@
 <link href="style.css" rel="stylesheet" type="text/css">
 
 <?php
-//Programa que permite extrer el codigo del archivo index de cualquier sitio y su localización
+/**
+ *Programa que permite extrer el codigo del index de cualquier sitio web
+ *PHP version 5
+ * @category  PHP
+ * @package   PHP_Spider
+ * @author    Felipe de Jesus Miramontes Romero <felipemiraontesr@gmail.com>
+ * @license   https://github.com/felipemiramontesr/spider GNU Licence
+ * @version   SVN: $Id: crawler.php, v 1.0 2015-05-23 14:05:00 ff Exp $
+ * @link      https://github.com/felipemiramontesr/spider
+ */
+
 
 //Reporte de errores PHP5
 error_reporting(E_ALL); 
-ini_set("display_errors","1");
+ini_set("display_errors", "1");
 
-/*Se asigna la informacion detalla de la localización del sitio web a la variable $data por medio
-la funcion GEOIP_RECORD_BY_NAME incluido en el paquete PECL GEOIP PHP*/
-            $ip = 
-                 $_POST["ip"];
+/*Se asigna la informacion detalla de la localización del sitio web a la 
+ *variable $data por mediola funcion GEOIP_RECORD_BY_NAME incluido en el paquete 
+ *PECL GEOIP PHP
+ */
+            $ip = $_POST["ip"];
 
-            $domain = 
-                     gethostbyaddr($ip);                          
+            $domain = gethostbyaddr($ip);                          
 
-            $data = 
-	             (geoip_record_by_name($domain));
+            $data = (geoip_record_by_name($domain));
 
-            $data_b =
-                     get_headers("http://www.saizac.com");   
+            $data_b = get_headers("http://www.saizac.com");   
 
-                     //print_r(get_headers("http://www.saizac.com", 1));
+            //print_r(get_headers("http://www.saizac.com", 1));
 
-		//Estructura de control que evalua si la variable $data se encuentra vacia o no
-		if($data){
+//Estructura de control que evalua si la variable $data se encuentra vacia o no 
+if ($data) {
 
-                  /*Se asigna a la variable $code los datos extraidos de la página index del sitio
-                  por medio de la funcion FILE_GET_CONTENTS*/
-                  $code = 
-                         file_get_contents("http://".$domain);
+    /**
+     *Se asigna a la variable $code los datos extraidos de la página index del sitio
+     *por medio de la funcion FILE_GET_CONTENTS
+     */
+      $code = file_get_contents("http://".$domain);
 
-                  //Apertura o creación del nuevo archivo code.txt y escritura del codigo extraido 
-                  $file = 
-                         fopen("code.txt","w+") 
-                                               or die ("Error 01: Error al crear el nuevo archivo!");
+    /**
+     *Apertura o creación del nuevo archivo code.txt y escritura del codigo extraido
+     */
 
-                  //Se escribe la información contenida en $code dentro del archivo code.txt          
-                  fwrite($file, $code);
+      $file = fopen("code.txt", "w+")
+      or die("Error 01: Error al crear el nuevo archivo!");
 
-                  //Cierre del archivo
-                  fclose($file);            
+      /**
+      *Se escribe la información contenida en $code dentro del archivo code.txt
+      */
 
-                 /* $shop = array( 
-                               1 => array($domain, $data["latitude"], $data["latitude"], $data["city"], $data["region"], $data["country_name"], $data["country_code"]),
-                               2 => array($domain, $data["latitude"], $data["latitude"], $data["city"], $data["region"], $data["country_name"], $data["country_code"])
-                               ); 
+      fwrite($file, $code);
 
-                  print_r($shop);*/
+      //Cierre del archivo
+      fclose($file);            
 
-		//Si la variable contiente información, se imprime los datos en una tabla HTML
-                  ?><table>
+      /**
+        * $shop = array( 
+        * 1 => array($domain, $data["latitude"], $data["latitude"], $data["city"], 
+        * $data["region"], $data["country_name"], $data["country_code"]),
+        * 2 => array($domain, $data["latitude"], $data["latitude"], $data["city"], 
+        * $data["region"], $data["country_name"], $data["country_code"])
+        *              ); 
+        *              print_r($shop);
+        */
+
+    //Si la variable contiente información, se imprime los datos en una tabla HTML
+                    ?><table>
                         <thead>
                               <tr>
                                     <th>Dominio</th>
@@ -116,8 +133,8 @@ la funcion GEOIP_RECORD_BY_NAME incluido en el paquete PECL GEOIP PHP*/
                                           print_r($data["country_code"]);
                                     echo "</td>";
                                     
-                              echo "</tr>";
-                  echo "</table>";
-      				  }                    
+                                    echo "</tr>";
+                                    echo "</table>";
+}                    
 ?>
 
