@@ -13,8 +13,8 @@
  */
 
 
-//Reporte de errores PHP5
-error_reporting(E_ALL); 
+//Reporte de errores PHP5 notifica todos los errores menos -Notice-
+error_reporting(E_ALL ^ E_NOTICE);
 ini_set("display_errors", "1");
 
 /*Se asigna la informacion detalla de la localización del sitio web a la 
@@ -27,7 +27,7 @@ ini_set("display_errors", "1");
 
             $data = (geoip_record_by_name($domain));
 
-            $data_b = get_headers("http://www.saizac.com");   
+            $data_b = get_headers("http://www.ingsoft.mx");   
 
             //print_r(get_headers("http://www.saizac.com", 1));
 
