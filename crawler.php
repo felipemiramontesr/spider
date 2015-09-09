@@ -1,8 +1,7 @@
 <link href="style.css" rel="stylesheet" type="text/css">
-
 <?php
 /**
- *Programa que permite extrer el codigo del index de cualquier sitio web
+ *Programa que permite extrer el codigo del archivo index y las cabeceras 
  *PHP version 5
  * @category  PHP
  * @package   PHP_Spider
@@ -13,24 +12,56 @@
  */
 
 
-//Reporte de errores PHP5 notifica todos los errores menos -Notice-
+//Reporte de errores: PHP5 notifica todos los errores menos los de tipo "Notice".
 error_reporting(E_ALL ^ E_NOTICE);
 ini_set("display_errors", "1");
 
-/*Se asigna la informacion detalla de la localización del sitio web a la 
- *variable $data por mediola funcion GEOIP_RECORD_BY_NAME incluido en el paquete 
+//Estrucutra de control que incremeta los valores de la sección a de una ip "a.b.c.d"
+for($a = 0; $a <= 1; $a++){
+      //Estrucutra de control que incremeta los valores de la sección b de una ip "a.b.c.d"
+      for($b = 0; $b <= 1; $b++){
+            //Estrucutra de control que incremeta los valores de la sección c de una ip "a.b.c.d"
+           for($c = 0; $c <= 10; $c++){
+                 //Estrucutra de control que incremeta los valores de la sección d de una ip "a.b.c.d"
+                for($d = 0; $d <= 10; $d++){
+
+                     /*Se asigna la informacion detalla de la localización geografica de una IP a la 
+ *variable $data por medio de la funcion GEOIP_RECORD_BY_NAME incluido en el paquete 
  *PECL GEOIP PHP
  */
-            $ip = $_POST["ip"];
+//$ip = $_POST["ip"];
+$aaa = strval($a);
+$bbb = strval($b);
+$ccc = strval($c);                     
+$ddd = strval($d);
 
-            $domain = gethostbyaddr($ip);                          
+$ip = $aaa.".".$bbb.".".$ccc.".".$ddd;                 
+$data = (geoip_record_by_name($ip));
 
-            $data = (geoip_record_by_name($domain));
+if($data == false) {
+                    ?>
+                    <table>
+                        <thead>
+                              <tr>
+                                    <th>IP</th>
+                                    <th>Response</th>
+                              </tr>
+                        </thead>
+                              <tr>
+                                    <td><?php
+                                    echo "<strong><h1>".$ip." </h1></strong>";
+                                    echo "</td>";
 
-            $data_b = get_headers("http://www.ingsoft.mx");   
+                                    echo "<td>";
+                                          echo "<center>";
+                                          echo "HTTP or HTTPS not found";
+                                          echo "</center>";
+                                    echo "</td>";
 
-            //print_r(get_headers("http://www.saizac.com", 1));
-
+                                    echo "</tr>";
+                                    echo "</table>";
+                                    ?><script>window.scrollBy(0,200);</script><?php
+                   }else{
 //Estructura de control que evalua si la variable $data se encuentra vacia o no 
 if ($data) {
 
@@ -38,7 +69,9 @@ if ($data) {
      *Se asigna a la variable $code los datos extraidos de la página index del sitio
      *por medio de la funcion FILE_GET_CONTENTS
      */
-      $code = file_get_contents("http://".$domain);
+       $code = file_get_contents("http://www.saizac.com");
+       //$gestor = fopen("http://".$domain."/sites/default/settings.php", "r");
+       
 
     /**
      *Apertura o creación del nuevo archivo code.txt y escritura del codigo extraido
@@ -56,26 +89,11 @@ if ($data) {
       //Cierre del archivo
       fclose($file);            
 
-      /**
-        * $shop = array( 
-        * 1 => array($domain, $data["latitude"], $data["latitude"], $data["city"], 
-        * $data["region"], $data["country_name"], $data["country_code"]),
-        * 2 => array($domain, $data["latitude"], $data["latitude"], $data["city"], 
-        * $data["region"], $data["country_name"], $data["country_code"])
-        *              ); 
-        *              print_r($shop);
-        */
-
-    //Si la variable contiente información, se imprime los datos en una tabla HTML
-                    ?><table>
+    //Si la variable contiente información se imprime los datos en una tabla HTML
+                    ?><table> 
                         <thead>
                               <tr>
-                                    <th>Dominio</th>
-                                    <th>Protocolo</th>
-                                    <th>Servidor</th>
-                                    <th>Modificación</th>
-                                    <th>Contenido</th>
-                                    <th>Plataforma</th>
+                                    <th>IP</th>
                                     <th>Latitud</th>
                                     <th>Longitud</th>
                                     <th>Ciudad</th>
@@ -86,27 +104,7 @@ if ($data) {
                         </thead>
                               <tr>
                                     <td><?php
-                                    echo "<strong>".$domain."</strong>";
-                                    echo "</td>";
-
-                                    echo "<td>";
-                                          print_r($data_b[0]);
-                                    echo "</td>";
-
-                                    echo "<td>";
-                                          print_r($data_b[2]);
-                                    echo "</td>";
-
-                                    echo "<td>";
-                                          print_r($data_b[10]);
-                                    echo "</td>";
-
-                                    echo "<td>";
-                                          print_r($data_b[12]);
-                                    echo "</td>";
-
-                                    echo "<td>";
-                                          print_r($data_b[8]);
+                                    echo "<strong><h1>".$ip." </h1></strong>";
                                     echo "</td>";
 
                                     echo "<td>";
@@ -135,6 +133,11 @@ if ($data) {
                                     
                                     echo "</tr>";
                                     echo "</table>";
-}                    
+                                    ?><script>window.scrollBy(0,200);</script><?php
+                                  }                                    
+                                }              
+                     }
+                }
+           }   
+      }
 ?>
-
